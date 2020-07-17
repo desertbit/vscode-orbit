@@ -1,0 +1,30 @@
+{
+    "name": "orbit",
+	"displayName": "orbit",
+	"publisher": "DesertBit",
+	"description": "Language support package for the orbit syntax",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/desertbit/vscode-orbit"
+	},
+    "version": "0.0.1",
+    "engines": {
+        "vscode": "^1.38.0"
+    },
+    "categories": [
+        "Programming Languages"
+	],
+	"icon": "icon.png",
+    "contributes": {
+        "languages": [{
+            "id": "orbit",
+            "extensions": [".orbit"],
+            "configuration": "./language-configuration.json"
+        }],
+        "grammars": [{
+            "language": "orbit",
+            "scopeName": "source.orbit",
+            "path": "./syntaxes/orbit.json"
+        }]
+    }
+}

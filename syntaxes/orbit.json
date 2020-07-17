@@ -1,0 +1,224 @@
+{
+    "scopeName": "source.orbit",
+    "patterns": [{ "include": "#expression" }],
+    "repository": {
+        "expression": {
+            "patterns": [
+                { "include": "#comment" },
+                { "include": "#version" },
+                { "include": "#service" },
+                { "include": "#type" },
+                { "include": "#enum" },
+                { "include": "#errors" }
+            ]
+        },
+        "comment": {
+            "name": "comment",
+            "patterns": [
+                { "include": "#comment-block" },
+                { "include": "#comment-line" }
+            ]
+        },
+        "comment-block": {
+            "begin": "/\\*",
+            "end": "\\*/",
+            "name": "comment.block"
+        },
+        "comment-line": {
+            "match": "(//).*$\\n?",
+            "name": "comment.line"
+        },
+        "version": {
+            "match": "(\\bversion\\b)\\s+([0-9]*\\b)",
+            "captures": {
+                "1": { "name": "keyword.version" }
+            }
+        },
+        "service": {
+            "begin": "(\\bservice\\b)\\s+({)",
+            "beginCaptures": {
+                "1": { "name": "keyword.service" },
+                "2": { "name": "punctuation.brackets.start" }
+            },
+            "patterns": [
+                { "include": "#comment" },
+                { "include": "#call" },
+                { "include": "#stream" }
+            ],
+            "end": "}",
+            "endCaptures": {
+                "0": { "name": "punctuation.brackets.end" }
+            }
+        },
+        "call": {
+            "begin": "(\\bcall\\b)\\s+([a-zA-Z][a-zA-Z0-9\\-_]*\\b)\\s+({)",
+            "beginCaptures": {
+                "1": { "name": "keyword.call" },
+                "3": { "name": "punctuation.brackets.start" }
+            },
+            "patterns": [
+                { "include": "#comment" },
+                { "include": "#arg" },
+                { "include": "#ret" },
+                { "include": "#property" },
+                {
+                    "match": "\\basync\\b",
+                    "name": "entity.name.type.async"
+                }
+            ],
+            "end": "}",
+            "endCaptures": {
+                "0": { "name": "punctuation.brackets.end" }
+            }
+        },
+        "stream": {
+            "begin": "(\\bstream\\b)\\s+([a-zA-Z][a-zA-Z0-9\\-_]*\\b)\\s+({)",
+            "beginCaptures": {
+                "1": { "name": "keyword.stream" },
+                "3": { "name": "punctuation.brackets.start" }
+            },
+            "patterns": [
+                { "include": "#comment" },
+                { "include": "#arg" },
+                { "include": "#ret" },
+                { "include": "#property" }
+            ],
+            "end": "}",
+            "endCaptures": {
+                "0": { "name": "punctuation.brackets.end" }
+            }
+        },
+        "arg": {
+            "patterns": [
+                {
+                    "match": "(\\barg:)\\s+([a-zA-Z0-9\\-]*\\b)",
+                    "captures": {
+                        "1": { "name": "entity.name.function" }
+                    }
+                },
+                {
+                    "begin": "(\\barg:)\\s+({)",
+                    "beginCaptures": {
+                        "1": { "name": "entity.name.function" },
+                        "2": { "name": "punctuation.brackets.start" }
+                    },
+                    "patterns": [
+                        { "include": "#type-block" }
+                    ],
+                    "end": "}",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.brackets.end" }
+                    }
+                }
+            ]
+        },
+        "ret": {
+            "patterns": [
+                {
+                    "match": "(\\bret:)\\s+([a-zA-Z0-9\\-]*\\b)",
+                    "captures": {
+                        "1": { "name": "entity.name.function" }
+                    }
+                },
+                {
+                    "begin": "(\\bret:)\\s+({)",
+                    "beginCaptures": {
+                        "1": { "name": "entity.name.function" },
+                        "2": { "name": "punctuation.brackets.start" }
+                    },
+                    "patterns": [
+                        { "include": "#type-block" }
+                    ],
+                    "end": "}",
+                    "endCaptures": {
+                        "0": { "name": "punctuation.brackets.end" }
+                    }
+                }
+            ]
+        },
+        "property": {
+            "match": "(\\b[a-zA-Z][a-zA-Z0-9\\-_]*:)\\s+([a-zA-Z0-9\\-]*\\b)",
+            "captures": {
+                "1": { "name": "entity.name.function" },
+                "2": { "name": "constant.character.async" }
+            }
+        },
+        "type": {
+            "begin": "(\\btype\\b)\\s+([a-zA-Z][a-zA-Z0-9\\-_]*\\b)\\s+({)",
+            "beginCaptures": {
+                "1": { "name": "keyword.type" },
+                "2": { "name": "entity.name.type" },
+                "3": { "name": "punctuation.brackets.start" }
+            },
+            "patterns": [
+                { "include": "#comment" },
+                { "include": "#type-block" }
+            ],
+            "end": "}",
+            "endCaptures": {
+                "0": { "name": "punctuation.brackets.end" }
+            }
+        },
+        "type-block": {
+            "patterns": [
+                { "include": "#comment" },
+                {
+                    "match": "(\\b[a-zA-Z][a-zA-Z0-9\\-_]*\\b)\\s+((\\[\\])?[a-zA-Z][a-zA-Z0-9\\-_\\[\\]]*\\b)\\s+(`.*`)",
+                    "captures": {
+                        "2": { "name": "storage.type" },
+                        "4": { "name": "string.quoted.tag" }
+                    }
+                },
+                {
+                    "match": "(\\b[a-zA-Z][a-zA-Z0-9\\-_]*\\b)\\s+((\\[\\])?[a-zA-Z][a-zA-Z0-9\\-_\\[\\]]*\\b)",
+                    "captures": {
+                        "2": { "name": "storage.type" }
+                    }
+                }
+            ]
+        },
+        "enum": {
+            "begin": "(\\benum\\b)\\s+([a-zA-Z][a-zA-Z0-9\\-_]*\\b)\\s+({)",
+            "beginCaptures": {
+                "1": { "name": "keyword.enum" },
+                "2": { "name": "entity.name.type" },
+                "3": { "name": "punctuation.brackets.start" }
+            },
+            "patterns": [
+                { "include": "#comment" },
+                { "include": "#enum-block" }
+            ],
+            "end": "}",
+            "endCaptures": {
+                "0": { "name": "punctuation.brackets.end" }
+            }
+        },
+        "enum-block": {
+            "patterns": [
+                { "include": "#comment" },
+                {
+                    "match": "(\\b[a-zA-Z][a-zA-Z0-9\\-_]*\\b)\\s+(=)\\s+([0-9]*\\b)",
+                    "captures": {
+                        "2": { "name": "keyword.operator.assignment" },
+                        "3": { "name": "constant.character.async" }
+                     }
+                }
+            ]
+        },
+        "errors": {
+            "begin": "(\\berrors\\b)\\s+({)",
+            "beginCaptures": {
+                "1": { "name": "keyword.errors" },
+                "2": { "name": "punctuation.brackets.start" }
+            },
+            "patterns": [
+                { "include": "#comment" },
+                { "include": "#enum-block" }
+            ],
+            "end": "}",
+            "endCaptures": {
+                "0": { "name": "punctuation.brackets.end" }
+            }
+        }
+    }
+}
