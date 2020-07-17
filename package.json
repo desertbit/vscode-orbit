@@ -1,7 +1,7 @@
 {
     "name": "orbit",
 	"displayName": "orbit",
-	"publisher": "DesertBit",
+	"publisher": "r0l1",
 	"description": "Language support package for the orbit syntax",
 	"repository": {
 		"type": "git",
